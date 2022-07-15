@@ -54,4 +54,11 @@ public class Student {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
+    @Override
+    public String toString() {
+        return "Student{" + "id=" + id + ", code=" + code + ", lastName=" + lastName + ", middleName=" + middleName + ", firstName=" + firstName + '}';
+    }
+    
+    
 }

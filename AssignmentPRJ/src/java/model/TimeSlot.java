@@ -38,6 +38,11 @@ public class TimeSlot {
     public void setEnd(Time end) {
         this.end = end;
     }
+
+    @Override
+    public String toString() {
+        return "TimeSlot{" + "id=" + id + ", start=" + start + ", end=" + end + '}';
+    }
     
     
 }

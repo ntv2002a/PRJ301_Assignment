@@ -18,4 +18,11 @@ public class Room {
     public void setId(String id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Room{" + "id=" + id + '}';
+    }
+    
+    
 }
