@@ -15,7 +15,7 @@ public class Group {
     private String name;
     private Lecturer lecturer;
     private Course course;
-    private ArrayList<Student> students;
+    private ArrayList<Student> students = new ArrayList<>();
 
     public ArrayList<Student> getStudents() {
         return students;

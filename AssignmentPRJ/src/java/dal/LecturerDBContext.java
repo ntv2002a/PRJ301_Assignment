@@ -16,11 +16,11 @@ import model.Lecturer;
  *
  * @author trung
  */
-public class LecturerDBContext extends DBContext<Lecturer>{
+public class LecturerDBContext extends DBContext<Lecturer> {
 
     public LecturerDBContext() {
     }
-    
+
     @Override
     public ArrayList<Lecturer> list() {
         ArrayList<Lecturer> lecturers = new ArrayList<>();
@@ -28,7 +28,7 @@ public class LecturerDBContext extends DBContext<Lecturer>{
             String sql = "select LecturerID, LecturerName, Email from Lecturer";
             PreparedStatement stm = connection.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 Lecturer l = new Lecturer();
                 l.setId(rs.getString("LecturerID"));
                 l.setName(rs.getNString("LecturerName"));
@@ -40,12 +40,33 @@ public class LecturerDBContext extends DBContext<Lecturer>{
         }
         return lecturers;
     }
-    
+
+    public Lecturer get(String id) {
+        try {
+            String sql = "select LecturerName, Email from Lecturer\n"
+                    + "where LecturerID = '"+ id +"'";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while(rs.next()) {
+                Lecturer l = new Lecturer();
+                l.setId(id);
+                l.setName(rs.getNString("LecturerName"));
+                l.setEmail(rs.getString("Email"));
+                return l;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(LecturerDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
 //    public static void main(String[] args) {
 //        LecturerDBContext lcd = new LecturerDBContext();
 //        ArrayList<Lecturer> lects = lcd.list();
 //        for (Lecturer lect : lects) {
 //            System.out.println(lect.toString());
 //        }
+//        Lecturer l = lcd.get("sonnt5");
+//        System.out.println(l.getName());
 //    }
 }

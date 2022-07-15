@@ -16,11 +16,11 @@ import model.TimeSlot;
  *
  * @author trung
  */
-public class TimeSlotDBContext extends DBContext<TimeSlot>{
+public class TimeSlotDBContext extends DBContext<TimeSlot> {
 
     public TimeSlotDBContext() {
     }
-    
+
     @Override
     public ArrayList<TimeSlot> list() {
         ArrayList<TimeSlot> timeSlots = new ArrayList<>();
@@ -28,7 +28,7 @@ public class TimeSlotDBContext extends DBContext<TimeSlot>{
             String sql = "select SlotID, TimeStart, TimeEnd from TimeSlot";
             PreparedStatement stm = connection.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 TimeSlot t = new TimeSlot();
                 t.setId(rs.getInt("SlotID"));
                 t.setStart(rs.getTime("TimeStart"));
@@ -40,7 +40,7 @@ public class TimeSlotDBContext extends DBContext<TimeSlot>{
         }
         return timeSlots;
     }
-    
+
 //    public static void main(String[] args) {
 //        TimeSlotDBContext tdc = new TimeSlotDBContext();
 //        ArrayList<TimeSlot> slots = tdc.list();
@@ -48,4 +48,22 @@ public class TimeSlotDBContext extends DBContext<TimeSlot>{
 //            System.out.println(slot.toString());
 //        }
 //    }
+    public TimeSlot get(int id) {
+        try {
+            String sql = "select TimeStart, TimeEnd from TimeSlot\n"
+                    + "where SlotID = " + id;
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                TimeSlot t = new TimeSlot();
+                t.setId(id);
+                t.setStart(rs.getTime("TimeStart"));
+                t.setEnd(rs.getTime("TimeEnd"));
+                return t;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(LecturerDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 }

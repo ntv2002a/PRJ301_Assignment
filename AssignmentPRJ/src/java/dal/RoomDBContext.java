@@ -16,11 +16,11 @@ import model.Room;
  *
  * @author trung
  */
-public class RoomDBContext extends DBContext<Room>{
+public class RoomDBContext extends DBContext<Room> {
 
     public RoomDBContext() {
     }
-    
+
     @Override
     public ArrayList<Room> list() {
         ArrayList<Room> rooms = new ArrayList<>();
@@ -28,7 +28,7 @@ public class RoomDBContext extends DBContext<Room>{
             String sql = "select RoomID from Room";
             PreparedStatement stm = connection.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 Room r = new Room();
                 r.setId(rs.getString("RoomID"));
                 rooms.add(r);
@@ -38,7 +38,7 @@ public class RoomDBContext extends DBContext<Room>{
         }
         return rooms;
     }
-    
+
 //    public static void main(String[] args) {
 //        RoomDBContext rdc = new RoomDBContext();
 //        ArrayList<Room> rooms = rdc.list();
@@ -46,5 +46,20 @@ public class RoomDBContext extends DBContext<Room>{
 //            System.out.println(room.toString());
 //        }
 //    }
-            
+    public Room get(String id) {
+        try {
+            String sql = "select RoomID from Room\n"
+                    + "where RoomID = '" + id + "'";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Room r = new Room();
+                r.setId(id);
+                return r;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(LecturerDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 }

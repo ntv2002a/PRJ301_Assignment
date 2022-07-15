@@ -16,11 +16,11 @@ import model.Course;
  *
  * @author trung
  */
-public class CourseDBContext extends DBContext<Course>{
+public class CourseDBContext extends DBContext<Course> {
 
     public CourseDBContext() {
     }
-    
+
     @Override
     public ArrayList<Course> list() {
         ArrayList<Course> courses = new ArrayList<>();
@@ -39,7 +39,25 @@ public class CourseDBContext extends DBContext<Course>{
         }
         return courses;
     }
-    
+
+    public Course get(String id) {
+        try {
+            String sql = "select CourseName from Course\n"
+                    + "where CourseID = '" + id + "'";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Course c = new Course();
+                c.setId(id);
+                c.setName(rs.getString("CourseName"));
+                return c;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(LecturerDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
 //    public static void main(String[] args) {
 //        CourseDBContext cdc = new CourseDBContext();
 //        ArrayList<Course> courses = cdc.list();
@@ -47,5 +65,4 @@ public class CourseDBContext extends DBContext<Course>{
 //            System.out.println(course.getId());
 //        }
 //    }
-    
 }

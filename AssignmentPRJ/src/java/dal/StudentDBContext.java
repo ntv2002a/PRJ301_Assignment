@@ -16,11 +16,11 @@ import model.Student;
  *
  * @author trung
  */
-public class StudentDBContext extends DBContext<Student>{
+public class StudentDBContext extends DBContext<Student> {
 
     public StudentDBContext() {
     }
-    
+
     @Override
     public ArrayList<Student> list() {
         ArrayList<Student> students = new ArrayList<>();
@@ -28,7 +28,7 @@ public class StudentDBContext extends DBContext<Student>{
             String sql = "select StudentID, MemberCode, LastName, MiddleName, FirstName from Student";
             PreparedStatement stm = connection.prepareStatement(sql);
             ResultSet rs = stm.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 Student s = new Student();
                 s.setId(rs.getString("StudentID"));
                 s.setCode(rs.getString("MemberCode"));
@@ -42,7 +42,7 @@ public class StudentDBContext extends DBContext<Student>{
         }
         return students;
     }
-    
+
 //    public static void main(String[] args) {
 //        StudentDBContext sdc = new StudentDBContext();
 //        ArrayList<Student> students = sdc.list();
@@ -50,4 +50,24 @@ public class StudentDBContext extends DBContext<Student>{
 //            System.out.println(s.toString());
 //        }
 //    }
+    public Student get(String id) {
+        try {
+            String sql = "select MemberCode, LastName, MiddleName, FirstName from Student\n"
+                    + "where StudentID = '" + id + "'";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Student s = new Student();
+                s.setId(id);
+                s.setCode(rs.getString("MemberCode"));
+                s.setLastName(rs.getNString("LastName"));
+                s.setMiddleName(rs.getNString("MiddleName"));
+                s.setFirstName(rs.getNString("FirstName"));
+                return s;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(StudentDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 }

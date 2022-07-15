@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author trung
@@ -14,7 +16,16 @@ public class Student {
     private String lastName;
     private String middleName;
     private String firstName;
+    private ArrayList<Group> groups = new ArrayList<>();
 
+    public ArrayList<Group> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(ArrayList<Group> groups) {
+        this.groups = groups;
+    }
+    
     public String getId() {
         return id;
     }
