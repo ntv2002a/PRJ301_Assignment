@@ -1,7 +1,7 @@
 <%-- 
     Document   : TimetableView
     Created on : Jun 22, 2022, 12:00:39 PM
-    Author     : trung
+    Author     : trungvu
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
