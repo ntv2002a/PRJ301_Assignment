@@ -46,14 +46,8 @@ public class AttendanceDBContext extends DBContext<Attendance>{
         return attendances;
     }
     
-    public static void main(String[] args) {
-        AttendanceDBContext adc = new AttendanceDBContext();
-        ArrayList<Attendance> attendances = adc.list();
-        int i = 0;
-        for (Attendance attendance : attendances) {
-            i++;
-        }
-        System.out.println(i++);
+    public ArrayList<Attendance> listBySession(int id) {
+        return null;
     }
             
 }

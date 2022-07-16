@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.TimeSlot;
@@ -65,5 +67,5 @@ public class TimeSlotDBContext extends DBContext<TimeSlot> {
             Logger.getLogger(LecturerDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
-    }
+    }            
 }
