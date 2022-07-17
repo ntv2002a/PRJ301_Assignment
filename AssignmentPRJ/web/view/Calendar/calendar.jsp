@@ -26,6 +26,7 @@
                 margin-top:20px;
                 margin-left: 10%;
                 margin-right: 10%;
+                font-family: Arial;
             }
             table{
                 width: 100%;
@@ -49,6 +50,7 @@
         </div>
         <div style="text-align: center;">Lecturer: ${sessionScope.account.userid}
         </div>
+        <br>
         <table border="1px solid black">
             <form action="Calendar" method="POST" id="year">
                 <tr>
@@ -86,11 +88,12 @@
                         <td><c:forEach items="${requestScope.sessions}" var="ss" varStatus="loop">
                                 <c:if test="${(ss.key.getDate().getDate() eq d.getDate()) && (ss.key.getSlot().getId() eq s.id)}" >
                                     <form action="attendance" method="POST" id="session">
+                                        <br>
                                         <input type="submit" value="${ss.key.getGroup().getCourse().getId()}">
                                         <br>
-                                        ${ss.key.getGroup().getName()} <br>
-                                        at ${ss.key.getRoomId().getId()} <br>
-                                        ${ss.value}
+                                        <p>${ss.key.getGroup().getName()}</p>
+                                        <p>at ${ss.key.getRoomId().getId()}</p>
+                                        <p ${ss.value.equals("Not yet")?"style='color: red'":"style='color: green'"}>${ss.value}</p>
                                         <input type="hidden" value="${ss.key.getId()}" name="sessionId">
                                     </form>
                                 </c:if>

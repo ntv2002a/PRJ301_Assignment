@@ -61,27 +61,29 @@ public class SessionDBContext extends DBContext<Session> {
 
     public Session get(int id) {
         try {
-            String sql = "select SessionNumber, LecturerID, Semester, SessionDate, GroupID, SlotID, RoomID from [Session]\n"
-                    + "where SessionID = " + id;
+            String sql = "select s.SessionNumber, s.Semester, s.SessionDate, s.SlotID, s.RoomID, c.CourseID from [Session] s inner join [Group] g\n"
+                    + "on s.GroupID = g.GroupID inner join Course c\n"
+                    + "on g.CourseID = c.CourseID\n"
+                    + "where s.SessionID = ?";
             PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Session s = new Session();
                 s.setId(id);
                 s.setNumber(rs.getInt("SessionNumber"));
-                LecturerDBContext ldc = new LecturerDBContext();
-                Lecturer l = ldc.get(rs.getString("LecturerID"));
-                s.setLecturer(l);
                 s.setSemester(rs.getString("Semester"));
                 s.setDate(rs.getDate("SessionDate"));
-                GroupDBContext gdc = new GroupDBContext();
-                Group g = gdc.get(rs.getInt("GroupID"));
+                Group g = new Group();
+                Course c = new Course();
+                c.setId(rs.getString("CourseID"));
+                g.setCourse(c);
                 s.setGroup(g);
-                TimeSlotDBContext tdc = new TimeSlotDBContext();
-                TimeSlot t = tdc.get(rs.getInt("SlotID"));
+                TimeSlot t = new TimeSlot();
+                t.setId(rs.getInt("SlotID"));
                 s.setSlot(t);
-                RoomDBContext rdc = new RoomDBContext();
-                Room r = rdc.get(rs.getString("RoomID"));
+                Room r = new Room();
+                r.setId(rs.getString("RoomID"));
                 s.setRoomId(r);
                 return s;
             }

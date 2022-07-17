@@ -51,7 +51,8 @@ public class AttendanceDBContext extends DBContext<Attendance> {
     public ArrayList<Attendance> listBySessionID(int id) {
         ArrayList<Attendance> attendances = new ArrayList<>();
         try {
-            String sql = "select a.StudentID, st.LastName, st.MiddleName, st.FirstName, a.SessionID, a.[Status], a.RecordTime, a.Note, s.SessionNumber, \n"
+            String sql = "select a.StudentID, st.LastName, st.MiddleName, st.FirstName, "
+                    + "a.SessionID, a.[Status], a.RecordTime, a.Note, s.SessionNumber, \n"
                     + "s.LecturerID, s.Semester, s.SessionDate, s.GroupID, g.GroupName\n"
                     + "from Attendance a Inner join [Session] s\n"
                     + "on a.SessionID = s.SessionID\n"

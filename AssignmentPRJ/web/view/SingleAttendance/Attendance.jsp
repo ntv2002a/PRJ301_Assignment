@@ -18,6 +18,7 @@
                 margin-top:20px;
                 margin-left: 10%;
                 margin-right: 10%;
+                font-family: Arial;
             }
             table{
                 width: 100%;
@@ -39,7 +40,7 @@
     <body>
         <h1>Single activity Attendance</h1>
         <h2>Attendance for ${requestScope.session.getGroup().getCourse().getId()}
-            with lecturer ${requestScope.session.getLecturer().getId()}
+            with lecturer ${sessionScope.account.userid}
             at slot ${requestScope.session.getSlot().getId()} on 
             <c:if test="${requestScope.session.getDate().getDay() eq 0}">Sunday</c:if>
             <c:if test="${requestScope.session.getDate().getDay() eq 1}">Monday</c:if>
@@ -48,8 +49,8 @@
             <c:if test="${requestScope.session.getDate().getDay() eq 4}">Thursday</c:if>
             <c:if test="${requestScope.session.getDate().getDay() eq 5}">Friday</c:if>
             <c:if test="${requestScope.session.getDate().getDay() eq 6}">Saturday</c:if>
-            ${requestScope.session.getDate().getDate()}/${requestScope.session.getDate().getMonth()+1}/${requestScope.session.getDate().getYear()+1900}
-            , ${requestScope.session.getSemester()}, in room ${requestScope.session.getRoomId().getId()}
+            ${requestScope.session.getDate().getDate()}/${requestScope.session.getDate().getMonth()+1}/${requestScope.session.getDate().getYear()+1900}, 
+            ${requestScope.session.getSemester()}, in room ${requestScope.session.getRoomId().getId()}
         </h2>
         <table border="1px solid black">
             <tr>
@@ -61,7 +62,7 @@
                 <th>Status</th>
                 <th>Note</th>
                 <th>Taker</th>
-                <th>RecordTime</th>
+                <th>Record Time</th>
             </tr>
             <c:forEach items="${requestScope.attendances}" var="a" varStatus="loop" >
                 <tr>
