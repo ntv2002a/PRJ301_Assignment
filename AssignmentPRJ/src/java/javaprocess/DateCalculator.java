@@ -70,9 +70,4 @@ public class DateCalculator {
         }
         return null;
     }
-
-    public static void main(String[] args) {
-        DateCalculator d = new DateCalculator();
-        System.out.println(d.getWeekById(2, 2022));
-    }
 }

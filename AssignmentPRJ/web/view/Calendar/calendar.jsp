@@ -84,13 +84,14 @@
                     <th>Slot ${s.id}</th>
                         <c:forEach items="${requestScope.dateWeek}" var="d" varStatus="loop">
                         <td><c:forEach items="${requestScope.sessions}" var="ss" varStatus="loop">
-                                <c:if test="${(ss.getDate().getDate() eq d.getDate()) && (ss.getSlot().getId() eq s.id)}" >
+                                <c:if test="${(ss.key.getDate().getDate() eq d.getDate()) && (ss.key.getSlot().getId() eq s.id)}" >
                                     <form action="attendance" method="POST" id="session">
-                                        <input type="submit" value="${ss.getGroup().getCourse().getId()}">
+                                        <input type="submit" value="${ss.key.getGroup().getCourse().getId()}">
                                         <br>
-                                        ${ss.getGroup().getName()} <br>
-                                        at ${ss.getRoomId().getId()}
-                                        <input type="hidden" value="${ss.getId()}" name="sessionId">
+                                        ${ss.key.getGroup().getName()} <br>
+                                        at ${ss.key.getRoomId().getId()} <br>
+                                        ${ss.value}
+                                        <input type="hidden" value="${ss.key.getId()}" name="sessionId">
                                     </form>
                                 </c:if>
                             </c:forEach></td>

@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javaprocess.DateCalculator;
+import model.Course;
 import model.Group;
 import model.Lecturer;
 import model.Room;
@@ -90,32 +91,41 @@ public class SessionDBContext extends DBContext<Session> {
         return null;
     }
 
-    public ArrayList<Session> listByWeek(Date start, Date end) {
+    public ArrayList<Session> listByWeek(Date start, Date end, String lectureId) {
         ArrayList<Session> sessions = new ArrayList<>();
         try {
-            String sql = "select SessionID, SessionNumber, LecturerID, Semester, SessionDate, GroupID, SlotID, RoomID from [Session]"
-                    + "where SessionDate between ? and ?";
+            String sql = "select s.SessionID, s.SessionNumber, s.Semester, s.SessionDate, s.SlotID,\n"
+                    + "s.RoomID, g.GroupID, g.GroupName, c.CourseID from [Session] s inner join [Group] g\n"
+                    + "on s.GroupID = g.GroupID inner join [Course] c\n"
+                    + "on g.CourseID = c.CourseID\n"
+                    + "where s.SessionDate between ? and ?\n"
+                    + "and s.LecturerID = ?";
             PreparedStatement stm = connection.prepareStatement(sql);
-            stm.setString(1, (start.getYear()+1900) + "-" + (start.getMonth()+1) + "-" + start.getDate());
-            stm.setString(2, (end.getYear()+1900) + "-" + (end.getMonth()+1) + "-" + end.getDate());
+            stm.setString(1, (start.getYear() + 1900) + "-" + (start.getMonth() + 1) + "-" + start.getDate());
+            stm.setString(2, (end.getYear() + 1900) + "-" + (end.getMonth() + 1) + "-" + end.getDate());
+            stm.setString(3, lectureId);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Session s = new Session();
                 s.setId(rs.getInt("SessionID"));
                 s.setNumber(rs.getInt("SessionNumber"));
-                LecturerDBContext ldc = new LecturerDBContext();
-                Lecturer l = ldc.get(rs.getString("LecturerID"));
+                Lecturer l = new Lecturer();
+                l.setId(lectureId);
                 s.setLecturer(l);
                 s.setSemester(rs.getString("Semester"));
                 s.setDate(rs.getDate("SessionDate"));
-                GroupDBContext gdc = new GroupDBContext();
-                Group g = gdc.get(rs.getInt("GroupID"));
+                Group g = new Group();
+                g.setId(rs.getInt("GroupID"));
+                g.setName(rs.getString("GroupName"));
+                Course c = new Course();
+                c.setId(rs.getString("CourseID"));
+                g.setCourse(c);
                 s.setGroup(g);
-                TimeSlotDBContext tdc = new TimeSlotDBContext();
-                TimeSlot t = tdc.get(rs.getInt("SlotID"));
+                TimeSlot t = new TimeSlot();
+                t.setId(rs.getInt("SlotID"));
                 s.setSlot(t);
-                RoomDBContext rdc = new RoomDBContext();
-                Room r = rdc.get(rs.getString("RoomID"));
+                Room r = new Room();
+                r.setId(rs.getString("RoomID"));
                 s.setRoomId(r);
                 sessions.add(s);
             }
