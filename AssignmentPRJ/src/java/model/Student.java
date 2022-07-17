@@ -65,6 +65,10 @@ public class Student {
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+    
+    public String getFullname() {
+        return this.lastName + " " + this.middleName + " " + this.firstName;
+    }
 
     @Override
     public String toString() {
