@@ -38,7 +38,7 @@ public class AttendanceDBContext extends DBContext<Attendance> {
                 Session s = sdc.get(rs.getInt("SessionID"));
                 a.setSession(s);
                 a.setStatus(rs.getString("Status"));
-                a.setRecordTime(rs.getTimestamp("RecordTime"));
+                a.setRecordTime(rs.getTime("RecordTime"));
                 a.setNote(rs.getString("Note"));
                 attendances.add(a);
             }
@@ -86,7 +86,7 @@ public class AttendanceDBContext extends DBContext<Attendance> {
                 s.setLecturer(l);
                 a.setSession(s);
                 a.setStatus(rs.getString("Status"));
-                a.setRecordTime(rs.getTimestamp("RecordTime"));
+                a.setRecordTime(rs.getTime("RecordTime"));
                 a.setNote(rs.getString("Note"));
                 attendances.add(a);
             }
@@ -111,13 +111,51 @@ public class AttendanceDBContext extends DBContext<Attendance> {
         }
         return false;
     }
+    
+    public void takeAttendances(ArrayList<Attendance> attendances) {
+        try {
+            connection.setAutoCommit(false);
+            for (Attendance attendance : attendances) {
+                String sql = "INSERT INTO [dbo].[Attendance]\n"
+                        + "           ([StudentID]\n"
+                        + "           ,[SessionID]\n"
+                        + "           ,[Status]\n"
+                        + "           ,[Recordtime]\n"
+                        + "           ,[Note])\n"
+                        + "     VALUES\n"
+                        + "           (?,?,?,?,?)";
+                PreparedStatement stm = connection.prepareStatement(sql);
+                stm.setString(1, attendance.getStudent().getId());
+                stm.setInt(2, attendance.getSession().getId());
+                stm.setString(3, attendance.getStatus());
+                stm.setTime(4, attendance.getRecordTime());
+                stm.setString(5, attendance.getNote());
+                stm.executeUpdate();
+            }
+            connection.commit();
 
-    public static void main(String[] args) {
-        AttendanceDBContext adc = new AttendanceDBContext();
-        ArrayList<Attendance> attendances = adc.listBySessionID(1);
-        for (Attendance a : attendances) {
-            System.out.println(a.getStudent().getId());
+        } catch (SQLException ex) {
+            Logger.getLogger(AttendanceDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                connection.rollback();
+            } catch (SQLException ex1) {
+                Logger.getLogger(AttendanceDBContext.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(AttendanceDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
+
+//    public static void main(String[] args) {
+//        AttendanceDBContext adc = new AttendanceDBContext();
+//        ArrayList<Attendance> attendances = adc.listBySessionID(1);
+//        for (Attendance a : attendances) {
+//            System.out.println(a.getStudent().getId());
+//        }
+//    }
 
 }

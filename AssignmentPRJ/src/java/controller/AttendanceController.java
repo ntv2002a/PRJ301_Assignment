@@ -5,17 +5,17 @@
 package controller;
 
 import dal.AttendanceDBContext;
-import dal.SessionDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.Time;
 import java.util.ArrayList;
-import java.util.HashMap;
-import model.Attendance;
 import model.Session;
+import model.Attendance;
+import model.Student;
 
 /**
  *
@@ -25,25 +25,34 @@ public class AttendanceController extends BaseAuthenticationController {
 
     @Override
     protected void processGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("view/SingleAttendance/Attendance.jsp").forward(request, response);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
     protected void processPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String raw_id = request.getParameter("sessionId");
-        int id = Integer.parseInt(raw_id);
-        AttendanceDBContext adc = new AttendanceDBContext();
-        ArrayList<Attendance> attendances = adc.listBySessionID(id);
-        SessionDBContext sdc = new SessionDBContext();
-        Session session = sdc.get(id);
+        String[] count = request.getParameterValues("count");
+        Session ss = new Session();
+        String raw_sid = request.getParameter("sessionId");
+        int sid = Integer.parseInt(raw_sid);
+        ss.setId(sid);
 
-        if (attendances.isEmpty()) {
-            response.getWriter().println("Class hasn't started yet!");
-        } else {
-            request.setAttribute("session", session);
-            request.setAttribute("attendances", attendances);
-            request.getRequestDispatcher("view/SingleAttendance/Attendance.jsp").forward(request, response);
+        ArrayList<Attendance> attendances = new ArrayList<>();
+        for (int i = 0; i < count.length; i++) {
+            Attendance a = new Attendance();
+            a.setSession(ss);
+            Student s = new Student();
+            s.setId(request.getParameter("id_" + count[i]));
+            a.setStudent(s);
+            a.setStatus(request.getParameter("status" + count[i]));
+            a.setNote(request.getParameter("note" + count[i]));
+            a.setRecordTime(Time.valueOf(request.getParameter("recordTime")));
+            attendances.add(a);
         }
+        
+        AttendanceDBContext adc = new AttendanceDBContext();
+        adc.takeAttendances(attendances);
+        
+        response.sendRedirect("takeattendance");
     }
 
 }

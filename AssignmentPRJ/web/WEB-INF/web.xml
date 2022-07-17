@@ -9,6 +9,18 @@
         <servlet-class>controller.CalendarController</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>SingleAttendanceController</servlet-name>
+        <servlet-class>controller.SingleAttendanceController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TakeAttendanceController</servlet-name>
+        <servlet-class>controller.TakeAttendanceController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GroupAttendance</servlet-name>
+        <servlet-class>controller.GroupAttendance</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>AttendanceController</servlet-name>
         <servlet-class>controller.AttendanceController</servlet-class>
     </servlet>
@@ -19,6 +31,18 @@
     <servlet-mapping>
         <servlet-name>CalendarController</servlet-name>
         <url-pattern>/Calendar</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SingleAttendanceController</servlet-name>
+        <url-pattern>/singleattendance</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TakeAttendanceController</servlet-name>
+        <url-pattern>/takeattendance</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GroupAttendance</servlet-name>
+        <url-pattern>/gr_attendance</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AttendanceController</servlet-name>

@@ -4,6 +4,8 @@
  */
 package javaprocess;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -70,4 +72,12 @@ public class DateCalculator {
         }
         return null;
     }
+    
+//    public static void main(String[] args) {
+//        Calendar c = Calendar.getInstance();
+//        String raw_date = (c.getTime().getYear() + 1900) + "-" + (c.getTime().getMonth() + 1) + "-" + (c.getTime().getDate());
+//        String raw_time = c.getTime().getHours() + ":" + c.getTime().getMinutes() + ":" + c.getTime().getSeconds();
+//        Time time = Time.valueOf(raw_time);
+//        System.out.println(time);
+//    }
 }

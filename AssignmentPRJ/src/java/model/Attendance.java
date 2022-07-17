@@ -4,7 +4,7 @@
  */
 package model;
 
-import java.sql.Timestamp;
+import java.sql.Time;
 
 /**
  *
@@ -14,7 +14,7 @@ public class Attendance {
     private Student student;
     private Session session;
     private String status;
-    private Timestamp recordTime;
+    private Time recordTime;
     private String note;
 
     public Student getStudent() {
@@ -41,11 +41,11 @@ public class Attendance {
         this.status = status;
     }
 
-    public Timestamp getRecordTime() {
+    public Time getRecordTime() {
         return recordTime;
     }
 
-    public void setRecordTime(Timestamp recordTime) {
+    public void setRecordTime(Time recordTime) {
         this.recordTime = recordTime;
     }
 

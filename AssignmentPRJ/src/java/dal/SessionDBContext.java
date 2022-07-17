@@ -93,7 +93,7 @@ public class SessionDBContext extends DBContext<Session> {
         return null;
     }
 
-    public ArrayList<Session> listByWeek(Date start, Date end, String lectureId) {
+    public ArrayList<Session> listByWeek(Date start, Date end, String lecturerId) {
         ArrayList<Session> sessions = new ArrayList<>();
         try {
             String sql = "select s.SessionID, s.SessionNumber, s.Semester, s.SessionDate, s.SlotID,\n"
@@ -105,14 +105,14 @@ public class SessionDBContext extends DBContext<Session> {
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, (start.getYear() + 1900) + "-" + (start.getMonth() + 1) + "-" + start.getDate());
             stm.setString(2, (end.getYear() + 1900) + "-" + (end.getMonth() + 1) + "-" + end.getDate());
-            stm.setString(3, lectureId);
+            stm.setString(3, lecturerId);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Session s = new Session();
                 s.setId(rs.getInt("SessionID"));
                 s.setNumber(rs.getInt("SessionNumber"));
                 Lecturer l = new Lecturer();
-                l.setId(lectureId);
+                l.setId(lecturerId);
                 s.setLecturer(l);
                 s.setSemester(rs.getString("Semester"));
                 s.setDate(rs.getDate("SessionDate"));
@@ -137,6 +137,42 @@ public class SessionDBContext extends DBContext<Session> {
         return sessions;
     }
 
+    public ArrayList<Session> listByDate(String date, String lecturerId) {
+        ArrayList<Session> sessions = new ArrayList<>();
+        try {
+            String sql = "select s.SessionID, s.SessionNumber, c.CourseID, s.SlotID, s.RoomID, g.GroupName, g.GroupID from [Session] s inner join [Group] g\n"
+                    + "on s.GroupID = g.GroupID inner join [Course] c\n"
+                    + "on g.CourseID = c.CourseID\n"
+                    + "where SessionDate = ?\n"
+                    + "and s.LecturerID = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, date);
+            stm.setString(2, lecturerId);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Session s = new Session();
+                s.setNumber(rs.getInt("SessionNumber"));
+                s.setId(rs.getInt("SessionID"));
+                Group g = new Group();
+                Course c = new Course();
+                c.setId(rs.getString("CourseID"));
+                g.setId(rs.getInt("GroupID"));
+                g.setCourse(c);
+                g.setName(rs.getString("GroupName"));
+                s.setGroup(g);
+                TimeSlot ts = new TimeSlot();
+                ts.setId(rs.getInt("SlotID"));
+                s.setSlot(ts);
+                Room r = new Room();
+                r.setId(rs.getString("RoomID"));
+                s.setRoomId(r);
+                sessions.add(s);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SessionDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return sessions;
+    }
 //    public static void main(String[] args) {
 //        SessionDBContext sdc = new SessionDBContext();
 //        DateCalculator dc = new DateCalculator();

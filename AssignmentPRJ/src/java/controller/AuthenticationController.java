@@ -79,8 +79,7 @@ public class AuthenticationController extends HttpServlet {
             response.getWriter().println("<h1>Login Failed!</h1>");
         } else {
             request.getSession().setAttribute("account", acc);
-//            request.getRequestDispatcher("/Calendar").forward(request, response);
-            response.getWriter().println("Welcome " + acc.getUserid());
+            request.getRequestDispatcher("view/Menu/menu.jsp").forward(request, response);
         }
 
     }

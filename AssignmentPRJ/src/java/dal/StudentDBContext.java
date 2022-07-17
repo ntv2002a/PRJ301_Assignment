@@ -53,8 +53,9 @@ public class StudentDBContext extends DBContext<Student> {
     public Student get(String id) {
         try {
             String sql = "select MemberCode, LastName, MiddleName, FirstName from Student\n"
-                    + "where StudentID = '" + id + "'";
+                    + "where StudentID = ?";
             PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setString(1, id);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Student s = new Student();
@@ -69,5 +70,29 @@ public class StudentDBContext extends DBContext<Student> {
             Logger.getLogger(StudentDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    public ArrayList<Student> getListStudent(int id) {
+        ArrayList<Student> students = new ArrayList<>();
+        try {
+            String sql = "select sg.StudentID, sg.GroupID, s.MemberCode, s.LastName, s.MiddleName, s.FirstName from [StudentGroup] sg inner join [Student] s\n"
+                    + "on sg.StudentID = s.StudentID\n"
+                    + "where sg.GroupID = ?";
+            PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Student s = new Student();
+                s.setId(rs.getString("StudentID"));
+                s.setCode(rs.getString("MemberCode"));
+                s.setLastName(rs.getNString("LastName"));
+                s.setMiddleName(rs.getNString("MiddleName"));
+                s.setFirstName(rs.getNString("FirstName"));
+                students.add(s);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return students;
     }
 }

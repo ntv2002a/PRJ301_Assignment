@@ -55,21 +55,20 @@ public class GroupDBContext extends DBContext<Group> {
 //    }
     public Group get(int id) {
         try {
-            String sql = "select GroupName, LecturerID, CourseID from [Group]\n"
-                    + "where GroupID = '" + id + "'";
+            String sql = "select GroupName, CourseID from [Group]\n"
+                    + "where GroupID = ?";
             PreparedStatement stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Group g = new Group();
                 g.setId(id);
                 g.setName(rs.getString("GroupName"));
-                LecturerDBContext ldc = new LecturerDBContext();
-                Lecturer l = ldc.get(rs.getString("LecturerID"));
-                g.setLecturer(l);
-                CourseDBContext cdc = new CourseDBContext();
-                Course c = cdc.get(rs.getString("CourseID"));
+                Course c = new Course();
+                c.setId(rs.getString("CourseID"));
                 g.setCourse(c);
-                ArrayList<Student> students = getListStudent(id);
+                StudentDBContext sdc = new StudentDBContext();
+                ArrayList<Student> students = sdc.getListStudent(id);
                 g.setStudents(students);
                 return g;
             }
@@ -79,21 +78,5 @@ public class GroupDBContext extends DBContext<Group> {
         return null;
     }
     
-    public ArrayList<Student> getListStudent(int id) {
-        ArrayList<Student> students = new ArrayList<>();
-        try {
-            String sql = "select StudentID from StudentGroup\n"
-                    + "where GroupID = " + id;
-            PreparedStatement stm = connection.prepareStatement(sql);
-            ResultSet rs = stm.executeQuery();
-            while (rs.next()) {
-                StudentDBContext sdc = new StudentDBContext();
-                Student s = sdc.get(rs.getString("StudentID"));
-                students.add(s);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(GroupDBContext.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return students;
-    }
+    
 }

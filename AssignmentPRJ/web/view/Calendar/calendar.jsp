@@ -87,7 +87,7 @@
                         <c:forEach items="${requestScope.dateWeek}" var="d" varStatus="loop">
                         <td><c:forEach items="${requestScope.sessions}" var="ss" varStatus="loop">
                                 <c:if test="${(ss.key.getDate().getDate() eq d.getDate()) && (ss.key.getSlot().getId() eq s.id)}" >
-                                    <form action="attendance" method="POST" id="session">
+                                    <form action="singleattendance" method="POST" id="session">
                                         <br>
                                         <input type="submit" value="${ss.key.getGroup().getCourse().getId()}">
                                         <br>
