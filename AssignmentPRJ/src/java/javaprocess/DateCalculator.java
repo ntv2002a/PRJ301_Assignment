@@ -55,9 +55,9 @@ public class DateCalculator {
         int id = 0;
         for (Week week : weeks) {
             if (!now.after(week.getMon())) {
+                id = week.getId();
                 break;
             }
-            id = week.getId();
         }
         return id;
     }
